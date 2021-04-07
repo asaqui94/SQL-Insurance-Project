@@ -28,9 +28,13 @@ INNER JOIN Claim C ON C.ClaimID = Clmt.ClaimID
 INNER JOIN Users U ON U.UserName = Clmt.EnteredBy
 INNER JOIN Users Users2 ON Users2.Supervisor = U.UserName
 INNER JOIN Users Users3 ON Users3.UserName = Users2.UserName
-INNER JOIN Office O ON O.OfficeID = U.OfficeID AND O.OfficeDesc IN ('Sacramento', 'San Diego', 'San Francisco')
+INNER JOIN Office O ON O.OfficeID = U.OfficeID 
 INNER JOIN ClaimantType CT ON CT.ClaimantTypeID = Clmt.ClaimantTypeID
 INNER JOIN Reserve R ON R.ClaimantID = Clmt.ClaimantID
-LEFT JOIN ClaimStatus CS ON CS.ClaimStatusID = Clmt.claimStatusID AND CS.ClaimStatusID = 1 OR CS.ClaimStatusID = 2 AND Clmt.ReopenedReasonID <> 3
-LEFT JOIN ReserveType RT ON RT.reserveTypeID = R.ReserveTypeID AND RT.ParentID IN (1,2,3,4,5) OR RT.reserveTypeID IN (1,2,3,4,5)
+LEFT JOIN ClaimStatus CS ON CS.ClaimStatusID = Clmt.claimStatusID 
+LEFT JOIN ReserveType RT ON RT.reserveTypeID = R.ReserveTypeID 
 LEFT JOIN Patient P ON P.PatientID = Clmt.PatientID
+WHERE O.OfficeDesc IN ('Sacramento', 'San Diego', 'San Francisco')
+    AND (RT.ParentID IN (1,2,3,4,5) OR RT.reserveTypeID IN (1,2,3,4,5))
+    AND (CS.ClaimStatusID = 1 OR CS.ClaimStatusID = 2 AND Clmt.ReopenedReasonID <> 3)
+
